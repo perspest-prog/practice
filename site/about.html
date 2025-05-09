@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI в менеджменте | Главная</title>
+    <title>AI в менеджменте | О проекте</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <header>
         <div class="width-container flex header_main">
@@ -308,88 +306,141 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="index.html" class="active">Главная</a></li>
-                    <li><a href="about.html">О проекте</a></li>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="about.html" class="active">О проекте</a></li>
                     <li><a href="implementation.html">Реализация технологии</a></li>
                     <li><a href="resources.html">Ресурсы</a></li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main>
-        <section class="hero">
-            <h1>AI в менеджменте</h1>
-            <p class="subtitle">Инновационный подход к управлению персоналом</p>
-        </section>
+        <section class="about-section">
+            <div class="width-container">
+                <h2 class="align">Актуальность и проблематика проекта</h2>
+                <p>Актуальность проекта обусловлена потребностью в автоматизации некоторых составляющих HR-процессов дилерских центров «BMW» за счет использования искусственного интеллекта (далее – ИИ).</p>
+                <p>ИИ позволит автоматизировать рутинные задачи, улучшить качество принятия решений, персонализировать подход к сотрудникам и укрепить бренд-инжиниринг компании, демонстрируя использование передовых технологий. Это обеспечит более быстрый найм высококвалифицированных специалистов и повысит их лояльность.</p>
+                <p>Проблематика проекта заключается в удовлетворении этой потребности.</p>
+                
 
-        <section class="annotation">
-            <h2 class="align">Аннотация проекта</h2>
-            <div class="content">
-                <p>Наш проект представляет собой исследование и внедрение искусственного интеллекта в сферу управления
-                    персоналом. В рамках практики в компании BMW мы разработали инновационный чат-бот, который помогает
-                    HR-специалистам составлять тексты вакансий с использованием технологий искусственного интеллекта.
-                </p>
-                <div class="highlights">
-                    <div class="highlight-item">
-                        <h3>Инновации</h3>
-                        <p>Внедрение AI в HR-процессы</p>
-                    </div>
-                    <div class="highlight-item">
-                        <h3>Практика</h3>
-                        <p>Реальный опыт в BMW</p>
-                    </div>
-                    <div class="highlight-item">
-                        <h3>Результаты</h3>
-                        <p>Работающий прототип чат-бота</p>
-                    </div>
+                <h2 class="align">Задачи</h2>
+                <ul>
+                    <li>Исследование существующих решений в области AI для HR</li>
+                    <li>Разработка прототипа чат-бота</li>
+                    <li>Тестирование и оптимизация решения</li>
+                    <li>Внедрение в рабочий процесс HR-отдела</li>
+                </ul>
+
+                <h2 class="align">Техническая реализация</h2>
+                <p>Проект реализован в виде Telegram-бота, использующего языковую модель GigaChat для генерации текстов вакансий. Бот взаимодействует с пользователем через диалог, собирая необходимую информацию о вакансии.</p>
+
+                <div class="code-section">
+                    <h3>Исходный код бота</h3>
+                    <pre><code class="language-javascript">
+import { Agent } from "node:https"
+
+import { Telegraf, session } from "telegraf";
+import { Stage, WizardScene } from "telegraf/scenes";
+import { message } from "telegraf/filters";
+
+import GigaChat from "gigachat";
+
+const bot = new Telegraf("7970149447:AAH5dyN_8FqYWC_qTPnzCDOLVEX5coZYoiQ")
+
+const giga = new GigaChat({
+    timeout: 600,
+    model: "GigaChat-Max",
+    credentials: "NzYyMjk1N2QtNTU5OS00MTk2LTgxMWQtOWI2ZWRkMzg3NGY4OmUzZjgzMDUxLTE4ZjEtNDUyMi04OGQ3LTZlZDU4ZDk1N2M3MA==",
+    httpsAgent: new Agent({ rejectUnauthorized: false })
+})
+
+const generatePrompt = ({name, education, experience, schedule, place}) => `Напиши вакансию для дилерского центра BMW. В общую часть включи: О компании (часть российской сети BMW; фокус на инновациях, премиум-качество, клиентский опыт). Мы предлагаем (конкурентная зарплата + бонусы, обучение по стандартам BMW, карьерный рост, льготы на авто/страхование, современное оборудование, дружный коллектив). Общие требования (клиентоориентированность, стремление к развитию, надежность, соблюдение стандартов BMW, презентабельный вид). Стиль: мотивирующий, профессиональный, без клише. Акцент на экспертизе, инновациях и премиум-сервисе. Убрать разъяснение терминов. Требования указаны ниже. Название вакансии:  ${name} Образование:  ${education} Опыт работа:  ${experience} График работы: ${schedule} Место работы: ${place} `
+
+const vacancy = new WizardScene("VacancyScene",
+  (ctx) => {
+    ctx.reply("Как будет называться вакансия?")
+    ctx.wizard.next()
+  },
+  (ctx) => {
+    const response = ctx.message.text
+    ctx.wizard.state.name = response
+
+    ctx.reply("Какое образование необходимо для вакансии?")
+    ctx.wizard.next()
+  },
+  (ctx) => {
+    const response = ctx.message.text
+    ctx.wizard.state.education = response
+    
+    ctx.reply("Какой опыт работы необходим для вакансии?")
+    ctx.wizard.next()
+  },
+  (ctx) => {
+    const response = ctx.message.text
+    ctx.wizard.state.experience = response
+    
+    ctx.reply("Какой график работы будет у этой вакансии?")
+    ctx.wizard.next()
+  },
+  (ctx) => {
+    const response = ctx.message.text
+    ctx.wizard.state.schedule = response
+    
+    ctx.reply("Где будет работать сотрудник этой вакансии?")
+    ctx.wizard.next()
+  },
+  async (ctx) => {
+    const response = ctx.message.text
+    ctx.wizard.state.place = response
+    
+    ctx.session.messages = [{
+      role: "user",
+      content: generatePrompt({ ...ctx.wizard.state })
+    }]
+    
+    const responce = await giga.chat({ messages: ctx.session.messages })
+    const text = responce.choices[0].message.content
+
+    await ctx.reply(text)
+    ctx.session.messages.push({role: "assistant", content: text})
+
+    ctx.scene.leave()
+  },
+)
+
+const scenes = new Stage([vacancy])
+bot.use(session())
+bot.use(scenes.middleware())
+
+bot.command("vacancy", Stage.enter("VacancyScene"))
+
+bot.on(message("text"), async (ctx) => {
+  const message = ctx.message.text
+
+  ctx.session.messages.push({ role: "user", content: message })
+
+  const responce = await giga.chat({ messages: ctx.session.messages })
+
+  ctx.session.messages.push({ role: "assistant", content: responce.choices[0].message.content})
+
+  await ctx.reply(responce.choices[0].message.content)
+  console.log(responce.usage.total_tokens)
+})
+
+bot.launch()
+                    </code></pre>
                 </div>
-            </div>
-        </section>
 
-        <section class="team-section">
-            <h2 class="align">Участники проекта</h2>
-            <div class="team-grid">
-                <div class="team-member">
-                    <h3>Авилов Иван Дмитриевич</h3>
-                    <p class="role">Руководитель проекта</p>
-                    <p class="contribution">Координация работы команды, взаимодействие с заказчиком, разработка чат-бота</p>
-                </div>
-                <div class="team-member">
-                    <h3>Барган Сергей Юрьевич</h3>
-                    <p class="role">Разработчик</p>
-                    <p class="contribution">Изучение и разработка собственной языковой модели для обработки текстов вакансий</p>
-                </div>
-                <div class="team-member">
-                    <h3>Григорьев Егор Владимирович</h3>
-                    <p class="role">Аналитик данных, тестировщик</p>
-                    <p class="contribution">Сбор и подготовка данных для тестирования и обучения чат-бота</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="journal-section">
-            <h2 class="align">Журнал проекта</h2>
-            <div class="journal-posts">
-                <article class="post">
-                    <h3>Начало проекта</h3>
-                    <p class="date">1 марта 2024</p>
-                    <p>Сформирована команда проекта, определены основные цели и задачи. Начато исследование существующих
-                        решений в области AI для HR.</p>
-                </article>
-
-                <article class="post">
-                    <h3>Разработка прототипа</h3>
-                    <p class="date">15 марта 2024</p>
-                    <p>Завершена разработка первой версии чат-бота. Начато тестирование с HR-специалистами BMW.</p>
-                </article>
-
-                <article class="post">
-                    <h3>Первые результаты</h3>
-                    <p class="date">1 апреля 2024</p>
-                    <p>Получены положительные отзывы от HR-отдела. Начата работа над оптимизацией алгоритмов на основе
-                        обратной связи.</p>
-                </article>
+                <h2>Как это работает</h2>
+                <p>Бот использует пошаговый диалог для сбора информации о вакансии:</p>
+                <ol>
+                    <li>Название вакансии</li>
+                    <li>Требуемое образование</li>
+                    <li>Необходимый опыт работы</li>
+                    <li>График работы</li>
+                    <li>Место работы</li>
+                </ol>
+                <p>После сбора всей информации, бот генерирует профессиональный текст вакансии с использованием языковой модели GigaChat, учитывая все стандарты и требования BMW.</p>
             </div>
         </section>
     </main>
@@ -398,5 +449,4 @@
         <p>&copy; 2024 Проект "AI в менеджменте". Все права защищены.</p>
     </footer>
 </body>
-
-</html>
+</html> 
