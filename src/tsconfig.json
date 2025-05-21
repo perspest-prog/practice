@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "lib": ["ES2016"],
+    // "esModuleInterop": true,
+    // "target": "es5",
+    // "allowJs": true,
+    // "skipLibCheck": true,
+    // "strict": false,
+    // "forceConsistentCasingInFileNames": true,
+    // "noEmit": true,
+    // "incremental": true,
+    // "module": "CommonJS",
+    // "moduleResolution": "node",
+    // "resolveJsonModule": true,
+    // "isolatedModules": true,
+  },
+  "include": [
+    "src"
+  ]
+}
